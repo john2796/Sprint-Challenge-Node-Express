@@ -26,6 +26,7 @@ class App extends Component {
     e.preventDefault();
     if (!this.state.name || !this.state.description) {
       alert("All fields are required");
+      return;
     }
     const post = {
       name: this.state.name,
