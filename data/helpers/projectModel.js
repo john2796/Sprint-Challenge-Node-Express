@@ -2,9 +2,6 @@ const db = require("../dbConfig.js");
 const mappers = require("./mappers");
 
 module.exports = {
-  find: function() {
-    return db("projects as p");
-  },
   get: function(id) {
     let query = db("projects as p");
 

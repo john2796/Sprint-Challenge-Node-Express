@@ -13,9 +13,9 @@ const errorHelper = (status, message, res) => {
 // @desc     Fetch All projects
 // @Access   Public
 server.get("/", (req, res) => {
-  Projects.find()
-    .then(proj => {
-      res.status(200).json(proj);
+  Projects.get()
+    .then(projects => {
+      res.status(200).json(projects);
     })
     .catch(err => {
       return errorHelper(500, "Internal Server Error", res);
@@ -69,7 +69,6 @@ server.put("/:id", (req, res) => {
   Projects.update(id, { name, description })
     .then(proj => {
       if (proj) {
-        console.log(proj);
         res.status(200).json(proj);
       } else {
         res.status(404).json({ message: "project not found" });
@@ -103,19 +102,22 @@ server.delete("/:id", (req, res) => {
 // @route    GET api/actions/:projectId
 // @desc     getProjectActions
 // @Access   Public
-server.get("/actions/:projectId", (req, res) => {
-  const { projectId } = req.params;
-  Projects.getProjectActions(projectId)
-    .then(res => {
-      if (res.length > 0) {
-        console.log("res", res);
-        res.status(200).json(res);
+server.get("/actions/:id", (req, res) => {
+  const { id } = req.params;
+
+  Projects.get(id)
+    .then(project => {
+      if (project) {
+        Projects.getProjectActions(id).then(project => {
+          res.status(200).json(project);
+        });
       } else {
-        res.status(404).json({ message: "action not found" });
+        res.status(404).json({ message: "Project not found" });
       }
     })
-    .catch(err => {
-      return errorHelper(500, err, res);
+    .catch(() => {
+      return errorHelper(500, "Server internal error", res);
     });
 });
+
 module.exports = server;
