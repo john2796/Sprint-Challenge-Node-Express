@@ -24,11 +24,16 @@ class App extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    if (!this.state.name || !this.state.description) {
+      alert("All fields are required");
+    }
     const post = {
       name: this.state.name,
       description: this.state.description
     };
     this.props.postProjects(post);
+    console.log(post);
+    this.setState({ name: "", description: "" });
   };
 
   componentDidMount() {
@@ -41,19 +46,31 @@ class App extends Component {
     return (
       <div className="App">
         <NavbarPage />
-        <Form inline>
+        <Form inline onSubmit={this.handleSubmit}>
           <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
             <Label for="exampleEmail" className="mr-sm-2">
               Email
             </Label>
-            <Input type="text" name="name" placeholder="name" />
+            <Input
+              onChange={this.handleChange}
+              type="text"
+              name="name"
+              placeholder="name"
+              value={this.state.name}
+            />
           </FormGroup>
           <FormGroup>
             <Label for="exampleText">description</Label>
-            <Input type="textarea" name="text" id="exampleText" />
+            <Input
+              onChange={this.handleChange}
+              type="textarea"
+              name="description"
+              value={this.state.description}
+            />
           </FormGroup>
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </Form>
+        {this.props.loading && <h1>Loading . . . </h1>}
         <Route
           exact
           path="/"
@@ -69,7 +86,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  projects: state.projectReducer.projects
+  projects: state.projectReducer.projects,
+  loading: state.projectReducer.loading
 });
 
 export default connect(

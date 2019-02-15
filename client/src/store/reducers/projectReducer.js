@@ -1,7 +1,8 @@
 import {
   LOADING,
   GET_PROJECT_SUCCESS,
-  GET_ACTION_SUCCESS
+  GET_ACTION_SUCCESS,
+  POST_PROJECT_SUCCESS
 } from "../actions/projectAction";
 
 const initialState = {
@@ -19,16 +20,19 @@ export default function reducerName(state = initialState, action) {
     case GET_PROJECT_SUCCESS:
       return {
         ...state,
-        projects: action.payload
+        projects: action.payload,
+        loading: false
       };
     case POST_PROJECT_SUCCESS:
       return {
-        ...state
+        ...state,
+        loading: false
       };
     case GET_ACTION_SUCCESS:
       return {
         ...state,
-        action: action.payload
+        action: action.payload,
+        loading: false
       };
 
     default:

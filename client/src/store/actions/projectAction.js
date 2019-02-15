@@ -24,17 +24,16 @@ export const getProjects = () => dispatch => {
       });
     });
 };
-export const postProjects = () => dispatch => {
+export const postProjects = data => dispatch => {
   dispatch(setUserLoading());
   axios
-    .get(PROJECT)
+    .post(`${PROJECT}`, data)
     .then(({ data }) =>
       dispatch({
         type: POST_PROJECT_SUCCESS
-      }).then(() => {
-        getProjects()(dispatch);
       })
     )
+    .then(() => getProjects()(dispatch))
     .catch(err => {
       dispatch({
         type: GET_ERRORS,
