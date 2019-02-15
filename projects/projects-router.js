@@ -27,7 +27,11 @@ server.get("/", (req, res) => {
 server.get("/:id", (req, res) => {
   Projects.get(req.params.id)
     .then(proj => {
-      res.status(200).json(proj);
+      if (proj) {
+        res.status(200).json(proj);
+      } else {
+        res.status(404).json({ message: "project not found" });
+      }
     })
     .catch(err => {
       return errorHelper(500, "Internal Server Error", res);
@@ -52,7 +56,7 @@ server.post("/", (req, res) => {
     });
 });
 
-// @route    UPDATE api/posts/:id
+// @route    UPDATE api/projects/:id
 // @desc     update
 // @Access   Public
 server.put("/:id", (req, res) => {
@@ -96,4 +100,22 @@ server.delete("/:id", (req, res) => {
     });
 });
 
+// @route    GET api/actions/:projectId
+// @desc     getProjectActions
+// @Access   Public
+server.get("/actions/:projectId", (req, res) => {
+  const { projectId } = req.params;
+  Projects.getProjectActions(projectId)
+    .then(res => {
+      if (res.length > 0) {
+        console.log("res", res);
+        res.status(200).json(res);
+      } else {
+        res.status(404).json({ message: "action not found" });
+      }
+    })
+    .catch(err => {
+      return errorHelper(500, err, res);
+    });
+});
 module.exports = server;

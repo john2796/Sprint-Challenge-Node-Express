@@ -5,6 +5,7 @@ const helmet = require("helmet");
 
 //import routes
 const projectsRoute = require("./projects/projects-router");
+const actionRoute = require("./actions/action-router");
 //init server
 const server = express();
 
@@ -16,6 +17,7 @@ server.use(logger("dev"));
 
 //use routes
 server.use("/api/projects", projectsRoute);
+server.use("/api/actions", actionRoute);
 
 const port = 5000;
 //listen to server
